@@ -1,5 +1,12 @@
-let button = document.getElementById("showName");
-console.log;
+// let button = document.getElementById("showName");
+// console.log;
+
+// const greetUser = greet.bind(user, 'Mumbai');
+
+
+// button.addEventListener("click", greetUser);
+
+// Polyfill of Bind
 
 function greet(city, country) {
   console.log("Hello " + this.name + " " + city + " " + country);
@@ -9,12 +16,15 @@ const user = {
   name: "steve",
 };
 
-const greetUser = greet.bind(user, 'Mumbai' , );
+Function.prototype.myBind = function (context, ...boundArgs) {
+  // this -> greet
+  const originalFn = this;
 
-console.log(greetUser);
+  return function (...lateArgs) {
+    return originalFn.apply(context, [...boundArgs, ...lateArgs]);
+  };
+};
 
+const greetUser = greet.myBind(user , 'Mumbai');
 
-button.addEventListener("click", greetUser);
-
-
-// Polyfills for call apply and Bind
+greetUser('India')
